@@ -6,8 +6,14 @@ COPY . .
 
 RUN dotnet restore
 
-RUN dotnet publish -c Release
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+WORKDIR /app
+
+COPY --from=0 /app/out .
 
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet","run"]
+ENTRYPOINT ["dotnet","app.dll"]
